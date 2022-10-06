@@ -1,0 +1,4 @@
+!!** IMPORTANT **!!
+
+Must have the nb-javac plugin installed to run servlets via the NetBeans IDE. 
+See screenshot images in this doc directory for a better graphical description.

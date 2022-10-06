@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- You may freely edit this file. See commented blocks below for -->
+<!-- some examples of how to customize the build. -->
+<!-- (If you delete it and reopen the project it will be recreated.) -->
+<!-- By default, only the Clean and Build commands use this build script. -->
+<!-- Commands such as Run, Debug, and Test only use this build script if -->
+<!-- the Compile on Save feature is turned off for the project. -->
+<!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
+<!-- in the project's Project Properties dialog box.-->
+<project name="X3D tools: X3D Validator" default="all" basedir=".">
+    <description>Builds, tests, and runs the project X3dValidator.</description>
+    <import file="nbproject/build-impl.xml"/>
+    <!--
+
+    There exist several targets which are by default empty and which can be 
+    used for execution of your tasks. These targets are usually executed 
+    before and after some main targets. They are: 
+
+      -pre-init:                 called before initialization of project properties 
+      -post-init:                called after initialization of project properties 
+      -pre-compile:              called before javac compilation 
+      -post-compile:             called after javac compilation 
+      -pre-compile-single:       called before javac compilation of single file
+      -post-compile-single:      called after javac compilation of single file
+      -pre-compile-test:         called before javac compilation of JUnit tests
+      -post-compile-test:        called after javac compilation of JUnit tests
+      -pre-compile-test-single:  called before javac compilation of single JUnit test
+      -post-compile-test-single: called after javac compilation of single JUunit test
+      -pre-dist:                 called before archive building 
+      -post-dist:                called after archive building 
+      -post-clean:               called after cleaning build products 
+      -pre-run-deploy:           called before deploying
+      -post-run-deploy:          called after deploying
+
+    Example of pluging an obfuscator after the compilation could look like 
+
+        <target name="-post-compile">
+            <obfuscate>
+                <fileset dir="${build.classes.dir}"/>
+            </obfuscate>
+        </target>
+
+    For list of available properties check the imported 
+    nbproject/build-impl.xml file. 
+
+
+    Other way how to customize the build is by overriding existing main targets.
+    The target of interest are: 
+
+      init-macrodef-javac:    defines macro for javac compilation
+      init-macrodef-junit:    defines macro for junit execution
+      init-macrodef-debug:    defines macro for class debugging
+      do-dist:                archive building
+      run:                    execution of project 
+      javadoc-build:          javadoc generation 
+
+    Example of overriding the target for project execution could look like 
+
+        <target name="run" depends="<PROJNAME>-impl.jar">
+            <exec dir="bin" executable="launcher.exe">
+                <arg file="${dist.jar}"/>
+            </exec>
+        </target>
+
+    Notice that overridden target depends on jar target and not only on 
+    compile target as regular run target does. Again, for list of available 
+    properties which you can use check the target you are overriding in 
+    nbproject/build-impl.xml file. 
+
+    -->
+
+    <property environment="env"/>
+    
+    <target name="all.deploy" depends="clean,dist,deploy" description="build and deploy, show tomcat administrator panel in browser"/>
+    
+    <!-- preferred Windows installation is to extract zip, the installer results in problematic permissions -->
+    <!-- local user password: C:\languages\java\apache-tomcat-9.0.54\conf\tomcat-users.xml -->
+    <!-- local user password: C:\Program Files\Apache Software Foundation\Tomcat 9.0\conf\tomcat-users.xml -->
+    <target name="all.run"    depends="run"    description="build and deploy X3D Validator to server">
+        <!-- no longer needed in Netbeans 14
+        <echo message="*** If running Netbeans and Java Platform JDK is upgraded, be sure to have latest nb-javac plugin re-installed or run-time exceptions may occur."/>-->
+    </target>
+    
+    <target name="deploy" depends="all.get,dist,deploy-instructions" description="build and deploy, show tomcat administrator panel in browser"/>
+    
+    <property name="TomcatWebApplicationManagerUrl"   value="https://savage.nps.edu/manager/html"/>
+    
+    <property name="TomcatWebApplicationManagerLocal" value="http://localhost:8080/manager/html"/>
+    
+    <property name="TomcatManagerDocumentation" value="https://tomcat.apache.org/tomcat-9.0-doc/manager-howto.html"/>
+
+    <target name="view.tomcat.local" description="view local Tomcat manager, documentation">
+        <!-- netbeans invocation -->
+        <nbbrowse url="${TomcatManagerDocumentation}" />
+        <nbbrowse url="${TomcatWebApplicationManagerLocal}" />
+    </target>
+
+    <target name="view.X3DValidator" description="view local Tomcat manager, documentation">
+        <echo message="launching https://savage.nps.edu/X3dValidator"/>
+        <!-- netbeans invocation -->
+        <nbbrowse url="https://savage.nps.edu/X3dValidator" />
+    </target>
+    
+    <target name="view.tomcat.local.logs" description="view local Tomcat log">
+        <echo message="Tomcat log directory: ${env.CATALINA_HOME}/logs"/>
+        <!-- netbeans invocation to view logs directory -->
+        <nbbrowse file="${env.CATALINA_HOME}/logs" />
+    </target>
+    
+    <target name="deploy-instructions" description="describes how to deploy to Savage server">
+        <echo message="The latest X3dValidator.war is too big to directly upload via the web interface."/>
+        <echo message="To deploy the new war file to the Savage server tomcat container, go to"/>
+        <echo message="    ${TomcatWebApplicationManagerUrl}"/>
+        <echo message="Now use Tomcat Web Application Manager to Stop, Undeploy, (upload) Deploy, and test."/>
+        <echo message="Access is password protected."/>
+        <echo message="The latest X3dValidator.war is too big to directly upload via the web interface."/>
+        <echo message="Direct upload:"/>
+        <echo message="* Default local build directory:"/>
+        <echo message="    C:\x3d-code\www.web3d.org\x3d\tools\X3dQualityAssurance\X3dValidator\dist\X3dValidator.war"/>
+        <echo message="* Default upload directory:"/>
+        <echo message="    /data/html/X3dValidatorWar"/>
+        <echo message="* Apache Tomcat War full directory path:"/>
+        <echo message="    /data/html/X3dValidatorWar/X3dValidator.war"/>
+        <echo message="Now start and test X3dValidator"/>
+        
+        <nbbrowse url="${TomcatWebApplicationManagerUrl}"/>
+    </target>
+    
+    <target name="all.get" depends="getX3dTools,getX3dStylesheets" description="Set up for local operation">
+        <!-- Under Netbeans you can simply "run" the project once built -->
+    </target>
+    
+    <target name="getX3dTools" description="get DOCTYPE and regex checkers">
+      <get src="https://svn.code.sf.net/p/x3d/code/www.web3d.org/x3d/tools/canonical/src/org/web3d/x3d/tools/X3dDoctypeChecker.java"
+                                                                       dest = "src/java/org/web3d/x3d/tools/X3dDoctypeChecker.java"     usetimestamp="true" verbose="true"/>
+      <get src="https://svn.code.sf.net/p/x3d/code/www.web3d.org/x3d/tools/canonical/src/org/web3d/x3d/tools/X3dValuesRegexChecker.java"
+                                                                       dest = "src/java/org/web3d/x3d/tools/X3dValuesRegexChecker.java" usetimestamp="true" verbose="true"/>
+      <get src="https://svn.code.sf.net/p/x3d/code/www.web3d.org/x3d/tools/canonical/src/org/web3d/x3d/tools/X3dToolsConstants.java"
+                                                                       dest = "src/java/org/web3d/x3d/tools/X3dToolsConstants.java"     usetimestamp="true" verbose="true"/>
+    </target>
+
+    <target name="getX3dStylesheets" description="get converstion stylesheets, including X3D Schematron">
+      <get src="https://svn.code.sf.net/p/x3d/code/www.web3d.org/x3d/stylesheets/X3dTidy.xslt"
+                                                   dest = "src/java/stylesheets/X3dTidy.xslt"                          usetimestamp="true" verbose="true"/>
+      <get src="https://svn.code.sf.net/p/x3d/code/www.web3d.org/x3d/stylesheets/X3dToXhtml.xslt"
+                                                   dest = "src/java/stylesheets/X3dToXhtml.xslt"                       usetimestamp="true" verbose="true"/>
+      <get src="https://svn.code.sf.net/p/x3d/code/www.web3d.org/x3d/stylesheets/X3dExtrusionCrossSectionToSvg.xslt"
+                                                   dest = "src/java/stylesheets/X3dExtrusionCrossSectionToSvg.xslt"    usetimestamp="true" verbose="true"/>
+      <get src="https://svn.code.sf.net/p/x3d/code/www.web3d.org/x3d/stylesheets/X3dExtrusionToSvgViaXslt2.0.xslt"
+                                                   dest = "src/java/stylesheets/X3dExtrusionToSvgViaXslt2.0.xslt"      usetimestamp="true" verbose="true"/>
+      <get src="https://svn.code.sf.net/p/x3d/code/www.web3d.org/x3d/stylesheets/X3dToVrml97.xslt"
+                                                   dest = "src/java/stylesheets/X3dToVrml97.xslt"                      usetimestamp="true" verbose="true"/>
+      <get src="https://svn.code.sf.net/p/x3d/code/www.web3d.org/x3d/stylesheets/X3dToX3dvClassicVrmlEncoding.xslt"
+                                                   dest = "src/java/stylesheets/X3dToX3dvClassicVrmlEncoding.xslt"     usetimestamp="true" verbose="true"/>
+      <get src="https://svn.code.sf.net/p/x3d/code/www.web3d.org/x3d/stylesheets/X3dToXhtml.xslt"
+                                                   dest = "src/java/stylesheets/X3dToXhtml.xslt"                       usetimestamp="true" verbose="true"/>
+      <get src="https://svn.code.sf.net/p/x3d/code/www.web3d.org/x3d/tools/schematron/X3dSchematronValidityChecks.xslt"
+                                                        dest = "src/java/stylesheets/X3dSchematronValidityChecks.xslt"      usetimestamp="true" verbose="true"/>
+      <get src="https://svn.code.sf.net/p/x3d/code/www.web3d.org/x3d/tools/schematron/SvrlReportText.xslt"
+                                                        dest = "src/java/stylesheets/SvrlReportText.xslt"                   usetimestamp="true" verbose="true"/>
+    </target>
+    
+</project>

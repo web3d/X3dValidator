@@ -1,0 +1,381 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" SYSTEM "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+  <head>
+    <link rel="icon" href="images/X3DtextIcon16.png" title="X3D" type="image/png"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>X3D Validator</title>
+    <meta name="creator" content="Mike Bailey, Don McGregor and Don Brutzman"/>
+    <meta name="created" content="28 March 2012"/>
+    <meta name="generator" content="Netbeans 8.0.2"/>
+    <meta name="reference" content="https://savage.nps.edu/X3dValidator"/>
+    <meta name="reference" content="https://www.web3d.org/x3d/content/examples/X3dResources.html"/>
+    <meta name="reference" content="https://www.web3d.org/x3d/content/examples/X3dSceneAuthoringHints.html"/>
+
+    <!-- note that link must be https if used on an https site: https://stackoverflow.com/questions/2075337/uncaught-referenceerror-is-not-defined -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript">
+      // The following search/replace comments are mandatory, DO NOT insert or move the semicolons
+      // also note that comments are space sensitive, do not! insert any in the following lines:
+      var commandLineUrl      /*URL_PARAMETER_START*/;/*URL_PARAMETER_END*/
+      var commandLineFilePath /*FILE_PARAMETER_START*/;/*FILE_PARAMETER_END*/
+      
+      $(document).ready(function() {  // jquery way
+        // Init for no url parameters
+        $("#path").show();
+        $("#hiddenPath").hide();
+        $("#showChooserButton").hide();
+        
+        if(commandLineUrl) {
+          $("#url").removeAttr("disabled");
+          $("#url").attr('value',commandLineUrl); 
+          $("#path").attr('disabled','disabled');
+          $("#web").removeAttr("disabled");
+          $("#web").attr('checked','checked');
+        }
+        else if(commandLineFilePath) {
+          $("#path").hide();
+          $("#hiddenPath").show();
+          $("#showChooserButton").show();
+          $("#hiddenPath").attr('value',commandLineFilePath);
+          $("#url").attr('disabled','disabled');
+          $("#local").removeAttr("disabled");
+          $("#local").attr('checked','checked');
+        }
+        
+        $("input[type=radio]").click(function()
+        {
+          var fileTF = $("#local").attr('checked');
+          if(fileTF) {
+            $("#path").removeAttr("disabled");
+            $("#url").attr('disabled','disabled');
+            checkFileNonNull();
+          }
+          else {
+            $("#url").removeAttr("disabled");
+            $("#path").attr('disabled','disabled');
+            checkWebNonNull();
+          }
+        });
+        
+        $("#path").click(function()
+        {
+            $("#local").attr('checked','checked');
+            $("#submitButton").removeAttr("disabled");
+        
+            return true;
+        });
+        $("#helloWorldButton").click(function()
+        {
+            $("#url").removeAttr("disabled");
+            $("#url").attr('value','https://www.web3d.org/x3d/content/examples/HelloWorld.x3d');
+            $("#web").removeAttr("disabled");
+            $("#web").attr('checked','checked');
+            $("#submitButton").removeAttr("disabled");
+        
+          return true;
+        });
+        $("#helloWorldX3DOMButton").click(function()
+        {
+            $("#url").removeAttr("disabled");
+            $("#url").attr('value','https://www.web3d.org/x3d/content/examples/HelloWorldX3dom.xhtml');
+            $("#web").removeAttr("disabled");
+            $("#web").attr('checked','checked');
+            $("#submitButton").removeAttr("disabled");
+        
+          return true;
+        });
+        $("#helloWorldX_ITEButton").click(function()
+        {
+            $("#url").removeAttr("disabled");
+            $("#url").attr('value','https://www.web3d.org/x3d/content/examples/HelloWorldX_ITE.html');
+            $("#web").removeAttr("disabled");
+            $("#web").attr('checked','checked');
+            $("#submitButton").removeAttr("disabled");
+        
+          return true;
+        });
+        $("#showChooserButton").click(function()
+        {
+            $("#path").show();
+            $("#hiddenPath").hide();
+            $("#showChooserButton").hide();
+        });
+        
+        if(commandLineUrl) {
+          $("#submitButton").removeAttr("disabled");
+        }
+        
+        if(commandLineFilePath) {
+           $("#submitButton").removeAttr("disabled");         
+        }
+        
+        $("#userForm").submit(function()
+        {
+          $("#submitButton").attr('disabled', 'disabled');
+          $("#resultsDiv").html('<br /><p align="center">Scene analysis and validation in progress<span style="text-decoration: blink;">...</span></p><br />');
+          return true;
+        });
+        
+        $('#url').bind('keyup click blur focus change paste', function()
+        {
+          checkWebNonNull();
+        });
+      });
+      
+      function fileClick()
+      {
+        
+      }
+      function webClick()
+      {
+        
+      }
+      function checkWebNonNull()
+      {
+        if($('#url').val().length > 0)
+        {
+          $("#web").attr('checked','checked');
+          $("#submitButton").removeAttr("disabled");
+        }
+        else if($("#path").val().length > 0)
+          $("#submitButton").attr('disabled', 'disabled');        
+      }
+      
+      function checkFileNonNull()
+      {
+        if($("#path").val().length > 0)
+        {
+          $("#local").attr('checked','checked');
+          $("#submitButton").removeAttr("disabled");
+        }
+        else if($('#url').val().length > 0)
+          $("#submitButton").attr('disabled', 'disabled');        
+      }
+      
+      function displayHiddenResult() // debugging method
+      {
+        alert("Browse button: " + $("#path").val() + "\n\n" + 
+              "Hidden text:   " + $("#hiddenPath").val());
+      }
+      
+     </script>
+     <!-- Style information from X3dToXhtml.xslt -->
+     <style type="text/css">
+span.element {color: navy}
+span.attribute {color: green}
+span.value {color: teal}
+span.plain {color: black}
+span.gray  {color: gray}
+span.idName {color: maroon}
+a.idName {color: maroon}
+div.center {text-align: center}
+div.indent {margin-left: 25px}
+
+span.prototype {color: purple}
+a.prototype {color: purple}
+a.prototype:visited {color: black}
+span.route {color: red}
+b.warning {color: #CC5500}
+b.error {color: #CC0000}
+    </style>
+<!-- https://www.quackit.com/html/codes/tables/html_table_border.cfm -->
+<style type="text/css">
+table.curvedEdges { border:10px solid RoyalBlue;-webkit-border-radius:13px;-moz-border-radius:13px;-ms-border-radius:13px;-o-border-radius:13px;border-radius:13px; }
+table.curvedEdges td, table.curvedEdges th { border-bottom:1px dotted black;padding:5px; }
+</style>
+  </head>
+  <body>
+            
+    <table border="0" align="center">
+        <tr align="center">
+            <td><a href="https://www.web3d.org/x3d/content/examples/X3dResources.html#QualityAssurance"><img src="https://www.web3d.org/x3d/content/examples/images/x3d2-s.gif" width="154" height="97" border="0" title="to X3D Resources: Quality Assurance (QA)"></a></td> <!--  alt="to X3D home page" -->
+            <!-- images/web3d_logo2.png -->
+            <td><pre>   </pre></td>
+            <td align='center'>
+                <h1>X3D Validator</h1>
+                The X3D Validator performs comprehensive Quality&nbsp;Assurance&nbsp;(QA) tests
+                <br />
+                to&nbsp;ensure the validity of X3D3,&nbsp;X3D4, and&nbsp;HAnim graphics models. <!-- TODO also allow HTML5 -->
+            </td>
+            <td><pre>   </pre></td>
+            <td><a href="https://www.web3d.org"><img src="https://www.web3d.org/x3d/content/examples/images/web3d_logo2.png" width="120" height="60" border="0" title="to Web3D home page"></a></td> <!--  alt="to X3D home page" -->
+            <!-- images/web3d_logo2.png -->
+        </tr>
+    </table>
+    
+  <center>  
+  <form id="userForm" name="userForm" action="validate" method="post" enctype="multipart/form-data">
+    <table border="1" rules="none">
+      <tr><td align="left"><input id="local"             type="radio"  name="method"      value="file" checked='checked' title="Browse your system"/> Choose a local .x3d model file</td></tr><!-- , or X3DOM page file (.xhtml or .html) -->
+      <!-- TODO filter file-browse default extension,  accept=".x3d"  accept="model/x3d+xml" -->
+      <tr><td align="full"><input id="path"              type="file"   name="filename"    size="240" accept=".x3d,.xml,.html,.xhtml" title="Browse your system"/></td></tr>
+      <tr><td align="full"><input id="hiddenPath"        type="text"   name="hiddenPath"  size="120"/>
+                           <input id="showChooserButton" type="button" name="showChooser" value="Show chooser"           title="Show browse file system button"/></td></tr>
+      <tr><td align="left">&nbsp;</td></tr>
+      <tr><td align="left"><input id="web"               type="radio"  name="method"      value="web"                    title="Enter an online .x3d url"/>Enter an online .x3d model url</td>
+          <!-- TODO , or X3DOM page url (.xhtml or .html) -->
+      </tr>
+      <tr>
+          <td align="left"><input id="url"               type="text"   name="url"         size="120" disabled="disabled" title="Enter an online .x3d url"/>
+                           <input id="helloWorldButton"      type="button" name="HelloWorld"      value="Hello World .x3d"        title="Test example:  HelloWorld.x3d"/>
+                           <!-- TODO
+                           <input id="helloWorldX3DOMButton" type="button" name="HelloWorldX3DOM" value="X3DOM"  title="(Validation tests not yet complete)" disabled='true'/>
+        				   <input id="helloWorldX_ITEButton" type="button" name="HelloWorldX_ITE" value="X_ITE"  title="(Validation tests not yet complete)" disabled='true'/>
+                           --><!-- Test example:  HelloWorldX3dom.xhtml -->
+		  </td>
+      </tr>
+    </table>
+    <br />
+    <table>
+        <!--
+      <tr><td>Upload the file and begin analysis:<br/></td></tr>
+        -->
+      <tr><td align="center"><input id="submitButton" disabled="disabled" type="submit" value="Validate" title="Upload this scene to Quality Assurance server for validation analysis"/></td></tr>
+    </table>
+  </form>
+  </center>
+  <br/>
+  
+    <!-- ================================================================================== -->
+    
+    <!-- pretty-print HTML results will go here -->
+    <div id="resultsDiv" style="background-color:#eeeeee;margin-left:50px;margin-right:50px;border:1px solid grey;white-space:pre-line;"><p><!--DELIMITER--></p></div>
+  
+    <!-- ================================================================================== -->
+    <h3><a name="Status">Help with X3D Models</a></h3>
+	
+	<p>
+		Here are resources that can help troubleshoot problems with X3D scenes.
+	</p>
+    
+    <ul>
+        <li>
+			<a href="https://www.web3d.org/x3d/content/X3dTooltips.html" title="Summary descriptions and authoring hints for each X3D node (element) and field (attribute)">X3D Tooltips</a>
+			provide authoring hints for each node and field found in X3D Architecture Specification.
+		</li>
+        <li>
+			<a href="https://www.web3d.org/x3d/content/examples/X3dResources.html" title="Numerous resources that support X3D graphics">X3D Resources: Authoring Support</a>
+			provides links to the X3D&nbsp;Specification, Schema &amp; DTD documentation, and other assets.
+		</li>
+        <li>
+			<a href="https://www.web3d.org/x3d/content/examples/X3dSceneAuthoringHints.html" title="Style guidelines, authoring tips and best practices">X3D Scene Authoring Hints</a>
+			provides author guidance for producing X3D scenes. 
+		</li>
+        <li>
+			<a href="mailto:x3d-public@web3d.org?subject=X3D%20question">x3d-public@web3d.org</a>
+			open mailing list
+			(<a href="https://www.web3d.org/mailman/listinfo/x3d-public_web3d.org" target="_blank">subscribe</a>)
+			(<a href="https://web3d.org/pipermail/x3d-public_web3d.org/" target="_blank">archive</a>)
+			is a good place to discuss X3D authoring and scene improvement.
+		</li>
+	</ul>
+	
+    <!-- ================================================================================== -->
+	<h3><a name="Status">X3D Validator Status</a></h3>
+    
+    <ul>
+        <li>
+            The
+            <a href="https://savage.nps.edu/X3dValidator">X3D Validator</a>
+            is maintained online at
+            <a href="https://savage.nps.edu/X3dValidator">https://savage.nps.edu/X3dValidator</a>
+        </li>
+        <li>
+            The
+            <a href="https://www.web3d.org/x3d/content/examples/X3dResources.html#QualityAssurance" target='X3dValidatorReference'>Quality Assurance (QA)</a>
+            section of the
+            <a href="https://www.web3d.org/x3d/content/examples/X3dResources.html" target='X3dValidatorReference'>X3D Resources</a>
+            page provides further information about these validation tests.
+        </li>
+        <li>
+            The same functionality is available locally on your desktop by using the checkmark button in the
+            <a href="https://savage.nps.edu/X3D-Edit" target="X3D_Edit">X3D-Edit</a>
+            authoring tool.
+        </li>
+        <li>
+            X3D Validator analysis of a given scene can be invoked via url, for example:
+            <br />
+            <code><a href="https://savage.nps.edu/X3dValidator?url=https://X3dGraphics.com/examples/X3dForWebAuthors/Chapter02-GeometryPrimitives/Box.x3d">https://savage.nps.edu/X3dValidator?url=https://X3dGraphics.com/examples/X3dForWebAuthors/Chapter02-GeometryPrimitives/Box.x3d</a></code>
+        </li>
+    </ul>
+    
+    <p>
+        Security note:  currently no scenes or errors are saved by the server.
+        Future versions may support submitting error reports of general interest.
+    </p>
+
+
+    <h3><a name="Development">Development Details</a></h3>
+    
+    <ul>
+
+        <li>
+            This tool implements full validation of
+            <a href="https://www.web3d.org/x3d4" target='blank'>X3D version 4 (X3D4)</a>
+            requirements.
+        </li>
+        <li>
+            This open-source project is developed and deployed using
+            <a href="https://ant.apache.org" target='blank'>Ant</a>,
+            <a href="https://openjdk.java.net" target='blank'>Java&nbsp;OpenJDK</a>,
+            <a href="https://www.netbeans.org" target='blank'>Netbeans</a>,
+            <a href="https://www.saxonica.com" target='blank'>Saxon</a> and
+            <a href="https://tomcat.apache.org" target='blank'>Tomcat</a>.
+			<!-- no longer required in v8.2
+            and requires the
+            <i>EJB and EAR plugin</i> to be installed. -->
+        </li>
+        <li>
+            <a href="https://savage.nps.edu/developers.html" target='blank'>Savage Developers Guide</a>
+            provides tool configuration information (including
+            <a href="https://savage.nps.edu/developers.html#Tomcat" target='blank'>Tomcat</a>
+            hints).
+        </li>
+        <li>
+            This codebase is published under an
+            <a href="license.html" target='X3dValidatorReference'>open-source license</a>
+           (<a href="license.txt" target='X3dValidatorReference'>.txt</a>),
+            available on
+            <a href="https://sourceforge.net/p/x3d/code/HEAD/tree/www.web3d.org/x3d/tools/X3dQualityAssurance/X3dValidator" target='X3dValidatorReference'>SourceForge</a>,
+            and undergoing continued development.
+        </li>
+        <li>
+            Deployment using Netbeans: first run target <code>all.get</code> to obtain additional code, then <code>all.run</code> the project to compile and launch locally.
+            Then run target <code>all.deploy</code> to publish (requires server-side permissions).
+        </li>
+        <li>
+            The Tomcat&nbsp;9 WAR file used for this servlet is available at
+            <a href="https://savage.nps.edu/X3dValidatorWar/X3dValidator.war">https://savage.nps.edu/X3dValidatorWar/X3dValidator.war</a>
+        </li>
+        
+    </ul>
+
+    <h3><a name="Contact">Contact</a></h3>
+
+    <ul>
+        <li>
+        Questions, suggestions and comments about these resources are welcome.
+        Please send them to
+        <a href="https://faculty.nps.edu/brutzman" target="_blank">Don&nbsp;Brutzman</a>
+        (<a href="mailto:brutzman%20at%20nps.edu%20(Don%20Brutzman)?subject=feedback:%20X3D%20Validator%20"><i>brutzman&nbsp;at&nbsp;nps.edu</i></a>)
+        </li>  
+
+        <li>
+            If you find this service useful, please consider providing a testimonial comment for our
+            <a href="https://www.web3d.org/realtime-3d/news/x3d-validator-available-x3d-scenes" target="_blank">Web3D Consortium news announcement</a>.
+        </li>
+        <li>
+            Updated:  30 August 2022
+            (<a href="https://sourceforge.net/p/x3d/code/HEAD/log/?path=/www.web3d.org/x3d/tools/X3dQualityAssurance/X3dValidator/web/xindex.html" target='_blank'>revision log</a>)
+        </li>
+    </ul>
+  
+  <p>
+    <a href="https://www.nps.navy.mil/disclaimer" target="disclaimer">Official disclaimer</a>:
+    "Material contained herein is made available for the purpose of
+    peer review and discussion and does not necessarily reflect the
+    views of the Department of the Navy or the Department of Defense."
+  </p>
+  
+</body>
+</html>
